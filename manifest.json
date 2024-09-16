@@ -1,0 +1,15 @@
+{
+  "id": "copilot-chinese",
+  "name": "Copilot-Chinese",
+  "version": "2.6.6",
+  "minAppVersion": "0.15.0",
+  "description": "Copilot插件汉化版, 更符合中国人习惯~",
+  "author": "子不语",
+  "authorUrl": "",
+  "fundingUrl": {
+    "Buy Me a Coffee": "",
+    "GitHub Sponsor": "https://github.com/zibuyu2015831"
+  },
+  "isDesktopOnly": false,
+  "branch": "main"
+}
