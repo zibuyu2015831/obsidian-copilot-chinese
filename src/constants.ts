@@ -35,12 +35,7 @@ export enum ChatModelProviders {
 }
 
 export const BUILTIN_CHAT_MODELS: CustomModel[] = [
-  // {
-  //   name: '示例，请忽略',
-  //   provider: ChatModelProviders.OPENAI,
-  //   enabled: false,
-  //   isBuiltIn: true,
-  // },
+  // 注意：这里必须要开启一个，开启一个不常用的，免得和自定义的混淆
   // {
   //   name: ChatModels.GPT_4o,
   //   provider: ChatModelProviders.OPENAI,
@@ -77,12 +72,12 @@ export const BUILTIN_CHAT_MODELS: CustomModel[] = [
   //   enabled: true,
   //   isBuiltIn: true,
   // },
-  // {
-  //   name: ChatModels.COMMAND_R_PLUS,
-  //   provider: ChatModelProviders.COHEREAI,
-  //   enabled: true,
-  //   isBuiltIn: true,
-  // },
+  {
+    name: ChatModels.COMMAND_R_PLUS,
+    provider: ChatModelProviders.COHEREAI,
+    enabled: true,
+    isBuiltIn: true,
+  },
   // {
   //   name: ChatModels.GEMINI_PRO,
   //   provider: ChatModelProviders.GOOGLE,

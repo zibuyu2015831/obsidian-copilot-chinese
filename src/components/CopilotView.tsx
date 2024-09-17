@@ -47,11 +47,11 @@ export default class CopilotView extends ItemView {
 
   // Return a title for this view
   getTitle(): string {
-    return "Copilot Chat";
+    return "Copilot 会话";
   }
 
   getDisplayText(): string {
-    return "Copilot";
+    return "Copilot-Chinese";
   }
 
   async onOpen(): Promise<void> {

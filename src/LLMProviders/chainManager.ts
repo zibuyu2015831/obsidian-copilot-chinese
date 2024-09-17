@@ -308,7 +308,7 @@ export default class ChainManager {
     // Check if chat model is initialized
     if (!this.chatModelManager.validateChatModel(this.chatModelManager.getChatModel())) {
       const errorMsg =
-        "Chat model is not initialized properly, check your API key in Copilot setting and make sure you have API access.";
+        "聊天模型未正确初始化，请在 Copilot 设置中检查您的 API 密钥，并确保您有 API 访问权限。";
       new Notice(errorMsg);
       console.error(errorMsg);
       return;
@@ -316,7 +316,7 @@ export default class ChainManager {
     // Check if chain is initialized properly
     if (!ChainManager.chain || !isSupportedChain(ChainManager.chain)) {
       console.error(
-        "Chain is not initialized properly, re-initializing chain: ",
+        "Chain 未正确初始化，正在重新初始化: ",
         this.langChainParams.chainType
       );
       this.setChain(this.langChainParams.chainType, this.langChainParams.options);

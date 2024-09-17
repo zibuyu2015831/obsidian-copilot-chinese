@@ -68,10 +68,10 @@ export class CopilotSettingTab extends PluginSettingTab {
       // Reload the plugin
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const app = this.plugin.app as any;
-      await app.plugins.disablePlugin("copilot");
-      await app.plugins.enablePlugin("copilot");
+      await app.plugins.disablePlugin("copilot-chinese");
+      await app.plugins.enablePlugin("copilot-chinese");
 
-      app.setting.openTabById("copilot").display();
+      app.setting.openTabById("copilot-chinese").display();
       new Notice("插件重启成功");
     } catch (error) {
       new Notice("插件重启失败，请手动重启插件");

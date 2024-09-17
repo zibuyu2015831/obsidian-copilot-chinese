@@ -71,7 +71,7 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
   addCommandIfEnabled(COMMAND_IDS.TRANSLATE, (editor) => {
     new LanguageModal(plugin.app, (language) => {
       if (!language) {
-        new Notice("Please select a language.");
+        new Notice("请选择一个语种");
         return;
       }
       plugin.processSelection(editor, "translateSelection", language);
@@ -81,7 +81,7 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
   addCommandIfEnabled(COMMAND_IDS.CHANGE_TONE, (editor) => {
     new ToneModal(plugin.app, (tone) => {
       if (!tone) {
-        new Notice("Please select a tone.");
+        new Notice("请选择一种改写风格");
         return;
       }
       plugin.processSelection(editor, "changeToneSelection", tone);
@@ -90,7 +90,7 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
 
   plugin.addCommand({
     id: "count-tokens",
-    name: "Count words and tokens in selection",
+    name: "计算选中区域的字数和tokens数",
     editorCallback: (editor: Editor) => {
       plugin.processSelection(editor, "countTokensSelection");
     },
@@ -98,10 +98,10 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
 
   plugin.addCommand({
     id: "count-total-vault-tokens",
-    name: "Count total tokens in your vault",
+    name: "计算所有笔记的tokens数",
     callback: async () => {
       const totalTokens = await plugin.countTotalTokens();
-      new Notice(`Total tokens in your vault: ${totalTokens}`);
+      new Notice(`总Tokens数是: ${totalTokens}`);
     },
   });
 }

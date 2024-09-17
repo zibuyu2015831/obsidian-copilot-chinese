@@ -63,7 +63,9 @@ export default class CopilotPlugin extends Plugin {
   isChatVisible = () => this.chatIsVisible;
 
   async onload(): Promise<void> {
+    // 加载配置
     await this.loadSettings();
+
     this.addSettingTab(new CopilotSettingTab(this.app, this));
     // Always have one instance of sharedState and chainManager in the plugin
     this.sharedState = new SharedState();
@@ -99,7 +101,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "chat-toggle-window",
-      name: "Toggle Copilot Chat Window",
+      name: "打开/关闭copilot聊天框",
       callback: () => {
         this.toggleView();
       },
@@ -107,13 +109,13 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "chat-toggle-window-note-area",
-      name: "Toggle Copilot Chat Window in Note Area",
+      name: "打开/关闭copilot聊天框 (笔记区域)",
       callback: () => {
         this.toggleViewNoteArea();
       },
     });
 
-    this.addRibbonIcon("message-square", "Copilot Chat", (evt: MouseEvent) => {
+    this.addRibbonIcon("message-square", "Copilot 会话", (evt: MouseEvent) => {
       this.toggleView();
     });
 
@@ -249,7 +251,7 @@ export default class CopilotPlugin extends Plugin {
                   false
                 ).open();
               } else {
-                new Notice(`No prompt found with the title "${promptTitle}".`);
+                new Notice(`没有找到这个prompt: "${promptTitle}".`);
               }
             } catch (err) {
               console.error(err);
@@ -347,7 +349,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "set-chat-note-context",
-      name: "Set note context for Chat mode",
+      name: "设置聊天框笔记",
       callback: async () => {
         new ChatNoteContextModal(this.app, this.settings, async (path: string, tags: string[]) => {
           // Store the path in the plugin's settings, default to empty string
@@ -360,7 +362,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "set-vault-qa-exclusion",
-      name: "Set exclusion for Vault QA mode",
+      name: "为 Vault QA 模式设置排除项",
       callback: async () => {
         new QAExclusionModal(this.app, this.settings, async (paths: string) => {
           // Store the path in the plugin's settings, default to empty string
@@ -372,7 +374,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "load-copilot-chat-conversation",
-      name: "Load Copilot Chat conversation",
+      name: "加载历史会话",
       callback: () => {
         this.loadCopilotChatHistory();
       },
@@ -399,7 +401,7 @@ export default class CopilotPlugin extends Plugin {
     // Temporary: Migrate Custom Prompts from PouchDB to Markdown files.
     this.addCommand({
       id: "dump-custom-prompts-to-markdown",
-      name: "Dump custom prompts to markdown files",
+      name: "将自定义prompts 存储到 Markdown 文件",
       callback: async () => {
         await this.dumpCustomPrompts();
       },
@@ -441,10 +443,10 @@ export default class CopilotPlugin extends Plugin {
         }
       }
 
-      new Notice(`Custom prompts dumped to ${folder} folder`);
+      new Notice(`自定义 prompts 保存到了【${folder}】目录下`);
     } catch (error) {
       console.error("Error dumping custom prompts:", error);
-      new Notice("Error dumping custom prompts. Check console for details.");
+      new Notice("导出自定义prompts时出错。请查看控制台以获取详细信息。");
     }
   }
 
@@ -456,7 +458,7 @@ export default class CopilotPlugin extends Plugin {
   async saveFileToVectorStore(file: TFile): Promise<void> {
     const embeddingInstance = this.embeddingsManager.getEmbeddingsAPI();
     if (!embeddingInstance) {
-      new Notice("Embedding instance not found.");
+      new Notice("没有找到 Embedding 实例");
       return;
     }
     const fileContent = await this.app.vault.cachedRead(file);
@@ -474,7 +476,7 @@ export default class CopilotPlugin extends Plugin {
   async indexVaultToVectorStore(overwrite?: boolean): Promise<number> {
     const embeddingInstance = this.embeddingsManager.getEmbeddingsAPI();
     if (!embeddingInstance) {
-      throw new Error("Embedding instance not found.");
+      throw new Error("没有找到 Embedding 实例");
     }
 
     // Check if embedding model has changed
@@ -496,11 +498,11 @@ export default class CopilotPlugin extends Plugin {
         this.dbVectorStores = new PouchDB<VectorStoreDocument>(
           `copilot_vector_stores_${this.getVaultIdentifier()}`
         );
-        new Notice("Detected change in embedding model. Rebuild vector store from scratch.");
-        console.log("Detected change in embedding model. Rebuild vector store from scratch.");
+        new Notice("检测到嵌入模型发生变化。从头开始重建向量存储库。");
+        console.log("检测到嵌入模型发生变化。从头开始重建向量存储库。");
       } catch (err) {
-        console.error("Error clearing vector store for reindexing:", err);
-        new Notice("Error clearing vector store for reindexing.");
+        console.error("清除向量存储库以便重新索引时出错。", err);
+        new Notice("清除向量存储库以便重新索引时出错。");
       }
     }
 
@@ -525,13 +527,13 @@ export default class CopilotPlugin extends Plugin {
 
     const totalFiles = files.length;
     if (totalFiles === 0) {
-      new Notice("Copilot vault index is up-to-date.");
+      new Notice("Copilot-Chinese: 当前索引是最新的");
       return 0;
     }
 
     let indexedCount = 0;
     const indexNotice = new Notice(
-      `Copilot is indexing your vault...\n0/${totalFiles} files processed.`,
+      `正在建立索引...\n0/${totalFiles} 个文件.`,
       0
     );
 
@@ -553,7 +555,7 @@ export default class CopilotPlugin extends Plugin {
 
         indexedCount++;
         indexNotice.setMessage(
-          `Copilot is indexing your vault...\n${indexedCount}/${totalFiles} files processed.`
+          `正在建立索引...\n${indexedCount}/${totalFiles} 个文件.`
         );
         return result;
       } catch (err) {
@@ -568,7 +570,7 @@ export default class CopilotPlugin extends Plugin {
     }, 2000);
 
     if (errors.length > 0) {
-      new Notice(`Indexing completed with errors. Check the console for details.`);
+      new Notice(`索引完成但有错误。请查看控制台以获取详细信息。`);
       console.log("Indexing Errors:", errors.join("\n"));
     }
     return files.length;
@@ -770,12 +772,32 @@ export default class CopilotPlugin extends Plugin {
   addContextMenu = (menu: Menu, editor: Editor, plugin: this): void => {
     menu.addItem((item) => {
       item
-        .setTitle("Copilot: Summarize Selection")
+        .setTitle("Copilot: 智能分段")
         .setIcon("bot")
         .onClick(async (e) => {
-          plugin.processSelection(editor, "summarizeSelection");
+          plugin.processSelection(editor, "ParagraphingSelection");
         });
     });
+
+    menu.addItem((item) => {
+      item
+        .setTitle("Copilot: 优化文本")
+        .setIcon("bot")
+        .onClick(async (e) => {
+          plugin.processSelection(editor, "perfectSelectionSelection");
+        });
+    });
+
+    menu.addItem((item) => {
+      item
+        .setTitle("Copilot: 中翻英")
+        .setIcon("book")
+        .onClick(async (e) => {
+          plugin.processSelection(editor, "transalteSelectionToEnglish");
+        });
+    });
+
+
   };
 
   getChainManagerParams(): LangChainParams {
@@ -836,7 +858,7 @@ export default class CopilotPlugin extends Plugin {
   async loadCopilotChatHistory() {
     const chatFiles = await this.getChatHistoryFiles();
     if (chatFiles.length === 0) {
-      new Notice("No chat history found.");
+      new Notice("未找到聊天历史记录");
       return;
     }
     new LoadChatHistoryModal(this.app, chatFiles, this.loadChatHistory.bind(this)).open();

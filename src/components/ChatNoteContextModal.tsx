@@ -21,11 +21,10 @@ export class ChatNoteContextModal extends Modal {
 
     pathContainer.createEl("h3", { text: "通过路径筛选", cls: "copilot-command-header" });
     const descFragment = createFragment((frag) => {
-      frag.appendText("All notes under the path will be sent to the prompt when the ");
-      frag.createEl("strong", { text: "Send Note(s) to Prompt" });
-      frag.appendText(" button is clicked in Chat mode. ");
-      frag.appendText("If none provided, ");
-      frag.createEl("strong", { text: "default context is the active note" });
+      frag.createEl("strong", { text: "在聊天框中点击【发送笔记】时，" });
+      frag.appendText("该路径下的所有笔记将被发送；");
+      frag.appendText("如果没有提供， ");
+      frag.createEl("strong", { text: "则默认使用当前被激活的笔记" });
     });
     pathContainer.appendChild(descFragment);
 
@@ -36,17 +35,17 @@ export class ChatNoteContextModal extends Modal {
     });
     pathField.setAttribute("name", "folderPath");
 
-    pathContainer.createEl("h3", { text: "Filter by Tags", cls: "copilot-command-header" });
+    pathContainer.createEl("h3", { text: "通过标签进行筛选", cls: "copilot-command-header" });
     const descTagsFragment = createFragment((frag) => {
       frag.createEl("strong", {
-        text: "Only tags in note property are used, tags in note content are not used.",
+        text: "仅使用笔记属性中的标签，不使用笔记内容中的标签。",
       });
       frag.createEl("p", {
-        text: "All notes under the path above are further filtered by the specified tags. If no path is provided, only tags are used. Multiple tags should be separated by commas. ",
+        text: "上述路径的所有笔记都由指定标签进一步筛选。如果没有提供路径，则仅使用标签。多个标签应以逗号分隔。",
       });
-      frag.createEl("strong", { text: "Tags function as an OR filter, " });
+      frag.createEl("strong", { text: "标签起到“或”过滤器的作用，" });
       frag.appendText(
-        " any note that matches one of the tags will be sent to the prompt when button is clicked in Chat mode."
+        "在聊天模式下点击按钮时，任何与其中一个标签匹配的笔记都会发送到提示框中。"
       );
     });
     pathContainer.appendChild(descTagsFragment);

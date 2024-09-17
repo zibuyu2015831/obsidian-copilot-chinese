@@ -16,11 +16,11 @@ export class QAExclusionModal extends Modal {
     const pathContainer = formContainer.createEl("div", { cls: "copilot-command-input-container" });
 
     pathContainer.createEl("h3", {
-      text: "Exclude by Folder Path or Note Title",
+      text: "通过文件夹路径或笔记标题排除",
       cls: "copilot-command-header",
     });
     const descFragment = createFragment((frag) => {
-      frag.appendText("All notes under the paths will be excluded from indexing");
+      frag.appendText("以下路径下的所有笔记将从索引中排除；");
     });
     pathContainer.appendChild(descFragment);
 
@@ -28,7 +28,7 @@ export class QAExclusionModal extends Modal {
       type: "text",
       cls: "copilot-command-input",
       value: this.settings.qaExclusionPaths,
-      placeholder: "Enter /folderPath, [[note title]] separated by commas",
+      placeholder: "输入 /路径, [[笔记标题]] ，以逗号分割",
     });
     pathField.setAttribute("name", "folderPath");
 
@@ -36,7 +36,7 @@ export class QAExclusionModal extends Modal {
       cls: "copilot-command-save-btn-container",
     });
     const submitButton = submitButtonContainer.createEl("button", {
-      text: "Submit",
+      text: "提交",
       cls: "copilot-command-save-btn",
     });
 

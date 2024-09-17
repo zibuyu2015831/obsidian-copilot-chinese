@@ -71,8 +71,8 @@ const ChatIcons: React.FC<ChatIconsProps> = ({
       if (selectedChain === ChainType.LONG_NOTE_QA_CHAIN) {
         const file = app.workspace.getActiveFile();
         if (!file) {
-          new Notice("No active note found.");
-          console.error("No active note found.");
+          new Notice("当前没有打开任何笔记");
+          console.error("没有找到激活的笔记");
           return;
         }
 
@@ -168,13 +168,10 @@ const ChatIcons: React.FC<ChatIconsProps> = ({
         <button className="chat-icon-button clickable-icon" onClick={onSendActiveNoteToPrompt}>
           <SendActiveNoteToPromptIcon className="icon-scaler" />
           <span className="tooltip-text">
-            Send Note(s) to Prompt
+            发送笔记
             <br />
-            (Set with Copilot command: <br />
-            set note context <br />
-            in Chat mode.
-            <br />
-            Default is active note)
+            （可通过命令【设置聊天框笔记】<br />进行设置: <br />
+            默认为当前笔记）
           </span>
         </button>
       )}
@@ -185,9 +182,9 @@ const ChatIcons: React.FC<ChatIconsProps> = ({
         >
           <UseActiveNoteAsContextIcon className="icon-scaler" />
           <span className="tooltip-text">
-            Refresh Index
+            刷新索引
             <br />
-            for Active Note
+            当前笔记
           </span>
         </button>
       )}
@@ -195,9 +192,9 @@ const ChatIcons: React.FC<ChatIconsProps> = ({
         <button className="chat-icon-button clickable-icon" onClick={onRefreshVaultContext}>
           <UseActiveNoteAsContextIcon className="icon-scaler" />
           <span className="tooltip-text">
-            Refresh Index
+            刷新索引
             <br />
-            for Vault
+            所有笔记
           </span>
         </button>
       )}
