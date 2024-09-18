@@ -6,7 +6,7 @@ import { MemoryVariables } from "@langchain/core/memory";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { BaseChain, RetrievalQAChain } from "langchain/chains";
 import moment from "moment";
-import { TFile, Vault, parseYaml } from "obsidian";
+import { TFile, Vault, parseYaml, Platform, Notice } from "obsidian";
 
 export const getModelNameFromKey = (modelKey: string): string => {
   return modelKey.split("|")[0];
@@ -331,6 +331,11 @@ export function getSendChatContextNotesPrompt(
 
 // 修正语法与拼写
 export function fixGrammarSpellingSelectionPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在修正语法与拼写...')
+  }
+
   return (
     `[user]: Please fix the grammar and spelling of the following text and return it without any other changes,\n\nHere is the text:\n\n【【【${selectedText}】】】
 [assistant]: OK, My response is :`
@@ -339,6 +344,11 @@ export function fixGrammarSpellingSelectionPrompt(selectedText: string): string 
 
 // 总结文本
 export function summarizePrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在执行【总结文本】')
+  }
+
   return (
     `[user]: Summarize the following text into bullet points and return it without any other changes. Identify the input language, and return the summary in the same language. If the input is English, return the summary in English. Otherwise, return in the same language as the input. Return ONLY the summary, DO NOT return the name of the language. Here is the text:\n\n【【【${selectedText}】】】
 [assistant]: OK, I will reply according to the language of the input text.
@@ -348,6 +358,10 @@ export function summarizePrompt(selectedText: string): string {
 
 // 转化成表格
 export function tocPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在将文本转化为表格...')
+  }
   return (
     `Please generate a table of contents for the following text and return it without any other changes. Output in the same language as the source, do not output English if it is not English:\n\n` +
     `${selectedText}`
@@ -356,6 +370,10 @@ export function tocPrompt(selectedText: string): string {
 
 // 为英文文本生成重难点单词
 export function extractKeyPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在提取重难点单词...')
+  }
   return (
     `[user]: Extract challenging or advanced English words from the text I provided. For each word, include the following information:
 
@@ -378,6 +396,10 @@ Here is the text that needs to be processed:
 
 // 分析问题
 export function simplifyPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在深入分析问题...')
+  }
   return (
     `[user]: Please help me understand the following topic/concept. I would like you to break down the explanation step by step, guiding me progressively from basic to more complex ideas. Start by explaining the fundamental concepts in simple terms, then gradually introduce more detailed information and examples. If possible, highlight any related concepts or background knowledge that could help in understanding. I may ask follow-up questions if something is unclear.
 
@@ -392,6 +414,10 @@ export function simplifyPrompt(selectedText: string): string {
 
 // 智能分段
 export function ParagraphingPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在进行智能分段...')
+  }
   return (
     `To improve readability, divide the input text into sections based on its meaning, but do not modify any part of the content. Please note, do not modify any part of the text, including punctuation or word order. Simply break the text into paragraphs by adding line breaks or empty lines at appropriate places, ensuring each paragraph is semantically complete and coherent.
 
@@ -403,26 +429,34 @@ Here is the text:
 
 // 将中文翻译成英文，并给出翻译解释
 export function cn2enPrompt(selectedText: string): string {
-  return (
-    `Please help me translate the following Chinese text into natural and fluent English while ensuring that the original meaning is preserved. Additionally, explain the basis for your translation choices, particularly how you adjusted the phrasing to fit English idiomatic expressions or cultural nuances.
 
-  The translation should:
-  
-  1. Retain the core meaning of the original Chinese.
-  2. Be expressed in a way that aligns with English-speaking conventions.
-  3. Provide brief commentary on translation decisions in Chinese, including:
-    - Adjustments made for tone or style differences between Chinese and English.
-    - Changes to sentence structure or word choice to enhance readability or clarity.
-    - Any cultural context that influenced the translation.
-  
-  Here is the text for translation:
-  
+  if (Platform.isMobile) {
+    new Notice('正在将文本翻译成英文...')
+  }
+  return (
+    `请帮我将以下中文翻译成自然流畅的英文，同时确保保留原意。翻译时需要：
+
+1. 保留中文的核心意思。
+2. 翻译表达符合英语的表达习惯。
+3. 提供简短的中文翻译决策说明，包括：
+  - 针对中文和英语之间语气或风格的不同所做的调整。
+  - 为了提高可读性或清晰度对句子结构或词汇选择所做的修改。
+  - 与文化背景相关的翻译决策。
+
+请注意，翻译决策说明部分需要用中文书写，以更好解释翻译过程中做出的调整。
+
+以下是需要翻译的文本：
+
 【【【${selectedText}】】】`
   );
 }
 
 // 将英文翻译成中文，并给出翻译解释
 export function en2cnPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在将文本翻译成中文...')
+  }
   return `Please translate the following English text into natural and fluent Chinese while preserving the original meaning. Additionally, provide a brief explanation of your translation choices, focusing on how you adapted the phrasing to fit Chinese idiomatic expressions and cultural nuances.
 
 The translation should:
@@ -441,6 +475,10 @@ Here is the text for translation:
 
 // 生成标签
 export function getTagsFromSelectionPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在生成标签...')
+  }
   return (
     `Extract the most important keywords from the following text and list them as tags. Each keyword should be preceded by the symbol "#" and separated by a space. The keywords should capture the core concepts and themes of the text, ensuring coverage of the main content. 
 
@@ -454,6 +492,10 @@ Please list the keywords in the specified format. The output language should mat
 
 // 缩短文本
 export function rewriteShorterSelectionPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在缩短文本...')
+  }
   return (
     `Shorten the following text while retaining its full meaning. Output in the same language as the source, do not output English if it is not English:
 
@@ -465,6 +507,10 @@ Here is the text that needs to be shorten:
 
 // 扩写文本
 export function rewriteLongerSelectionPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在扩写文本...')
+  }
   return (
     `Expand the short text provided by the user into a rich, well-structured long text, enhancing its appeal and expressiveness. The expanded text should maintain the original theme and style, avoiding deviation from the original meaning. The content should be coherent, logical, and well-developed.
 
@@ -481,6 +527,10 @@ Here is the text that needs to be processed:
 
 // 用简单英文解释复杂英文
 export function englishExplainSelectionPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在进行英英解释...')
+  }
   return (
     `You are going to explain the following English sentence or word in a simple and easy-to-understand way for an English beginner. Your explanation should be in English and should help the user understand the original sentence or word better. If it's a sentence, break down any difficult words or phrases. If it's a word, explain its meaning and usage. Make sure your explanation is clear and accessible for someone new to learning English. 
 
@@ -494,6 +544,10 @@ Please provide a straightforward and easy-to-follow explanation.`
 
 // 优化文本
 export function perfectSelectionPrompt(selectedText: string): string {
+
+  if (Platform.isMobile) {
+    new Notice('正在优化文本...')
+  }
   return (
     `Without altering the original intent and style, correct any typos, misspellings, and improper punctuation in the text. Adjust sentence structure where necessary to ensure the text's accuracy and professionalism. To improve readability, add paragraph breaks in appropriate places. The original mea ning and style of the text must be preserved, and no content should be added or removed. The output must be in the original language of the text.
 
@@ -504,12 +558,20 @@ Here is the text:
 }
 
 export function createTranslateSelectionPrompt(language?: string) {
+
+  if (Platform.isMobile) {
+    new Notice('正在进行翻译...')
+  }
   return (selectedText: string): string => {
     return `Please translate the following text to ${language}:\n\n` + `${selectedText}`;
   };
 }
 
 export function createChangeToneSelectionPrompt(tone?: string) {
+
+  if (Platform.isMobile) {
+    new Notice('正在修改文本风格...')
+  }
   return (selectedText: string): string => {
     return (
       `${prompt}. Output in the same language as the source, do not output English if it is not English:

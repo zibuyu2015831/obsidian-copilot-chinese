@@ -109,6 +109,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "chat-toggle-window",
+      icon: 'message-square-more',
       name: "打开/关闭copilot聊天框 (右侧区域)",
       callback: () => {
         this.toggleView();
@@ -117,6 +118,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "chat-toggle-window-note-area",
+      icon: 'circle-ellipsis',
       name: "打开/关闭copilot聊天框 (笔记区域)",
       callback: () => {
         this.toggleViewNoteArea();
@@ -133,6 +135,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "add-custom-prompt",
+      icon: 'plus',
       name: "添加自定义 prompt",
       callback: () => {
         new AddPromptModal(this.app, async (title: string, prompt: string) => {
@@ -149,6 +152,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "apply-custom-prompt",
+      icon: 'pointer',
       name: "应用自定义 prompt",
       callback: async () => {
         const prompts = await promptProcessor.getAllPrompts();
@@ -175,6 +179,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "apply-adhoc-prompt",
+      icon: 'bot',
       name: "copilot 对话",
       callback: async () => {
         const modal = new AdhocPromptModal(this.app, async (adhocPrompt: string) => {
@@ -192,6 +197,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "delete-custom-prompt",
+      icon: 'x',
       name: "删除自定义 prompt",
       checkCallback: (checking: boolean) => {
         if (checking) {
@@ -222,6 +228,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "edit-custom-prompt",
+      icon: 'pencil',
       name: "编辑自定义 prompt",
       checkCallback: (checking: boolean) => {
         if (checking) {
@@ -274,7 +281,8 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "clear-local-vector-store",
-      name: "Clear local vector store",
+      icon: 'trash',
+      name: "清除本地向量索引",
       callback: async () => {
         try {
           // Clear the vectorstore db
@@ -294,6 +302,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "garbage-collect-vector-store",
+      icon: 'trash-2',
       name: "清理索引存储 (移除不存在的文件)",
       callback: async () => {
         try {
@@ -325,6 +334,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "index-vault-to-vector-store",
+      icon: 'refresh-ccw',
       name: "刷新索引 (QA模式)",
       callback: async () => {
         try {
@@ -341,6 +351,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "force-reindex-vault-to-vector-store",
+      icon: 'zap',
       name: "强制刷新索引 (QA模式)",
       callback: async () => {
         try {
@@ -357,6 +368,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "set-chat-note-context",
+      icon: 'scroll-text',
       name: "设置聊天框笔记",
       callback: async () => {
         new ChatNoteContextModal(this.app, this.settings, async (path: string, tags: string[]) => {
@@ -370,6 +382,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "set-vault-qa-exclusion",
+      icon: 'badge-minus',
       name: "为 QA 模式设置排除项",
       callback: async () => {
         new QAExclusionModal(this.app, this.settings, async (paths: string) => {
@@ -382,6 +395,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "load-copilot-chat-conversation",
+      icon: 'hard-drive-upload',
       name: "加载历史会话",
       callback: () => {
         this.loadCopilotChatHistory();
@@ -409,6 +423,7 @@ export default class CopilotPlugin extends Plugin {
     // Temporary: Migrate Custom Prompts from PouchDB to Markdown files.
     this.addCommand({
       id: "dump-custom-prompts-to-markdown",
+      icon: 'hard-drive-download',
       name: "将自定义prompts 存储到 Markdown 文件",
       callback: async () => {
         await this.dumpCustomPrompts();
@@ -824,7 +839,7 @@ export default class CopilotPlugin extends Plugin {
     menu.addItem((item) => {
       item
         .setTitle("Copilot: 中翻英")
-        .setIcon("book")
+        .setIcon("bot")
         .onClick(async (e) => {
           plugin.processSelection(editor, "transalteSelectionToEnglish");
         });

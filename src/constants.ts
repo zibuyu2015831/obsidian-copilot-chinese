@@ -225,62 +225,77 @@ export const DEFAULT_SETTINGS: CopilotSettings = {
   enabledCommands: {
     [COMMAND_IDS.FIX_GRAMMAR]: {
       enabled: true,
+      icon: "pencil-line",
       name: "检查选中内容的语法与拼写",
     },
     [COMMAND_IDS.SUMMARIZE]: {
       enabled: true,
+      icon: "book-key",
       name: "根据选中的内容生成摘要",
     },
     [COMMAND_IDS.GENERATE_TOC]: {
       enabled: true,
+      icon:"captions",
       name: "根据选中的内容生成表格",
     },
     [COMMAND_IDS.EXTRACT_KEY]: {
       enabled: true,
+      icon: "key",
       name: "从选中的内容里提取重难点单词",
     },
     [COMMAND_IDS.SIMPLIFY]: {
       enabled: true,
+      icon: "bone",
       name: "深入分析选中的内容",
     },
     [COMMAND_IDS.PARAGRAPHING]: {
       enabled: true,
+      icon: "split",
       name: "智能分段",
     },
     [COMMAND_IDS.CN_TO_EN]: {
       enabled: true,
+      icon: "case-upper",
       name: "将选中的内容翻译成英文并给出解释",
     },
     [COMMAND_IDS.EN_TO_CN]: {
       enabled: true,
+      icon: "languages",
       name: "将选中内容翻译成中文并给出解释",
     },
     [COMMAND_IDS.GET_TAGS]: {
       enabled: true,
+      icon: "globe",
       name: "从选中的内容里获取关键词作为标签",
     },
     [COMMAND_IDS.MAKE_SHORTER]: {
       enabled: true,
+      icon: "book-minus",
       name: "缩短选中的内容",
     },
     [COMMAND_IDS.MAKE_LONGER]: {
       enabled: true,
+      icon: "book-open",
       name: "扩写选中的内容",
     },
     [COMMAND_IDS.ENGLISH_EXPLAIN]: {
       enabled: true,
+      icon: "shield-question",
       name: "用英文解释选中的内容",
     },
     [COMMAND_IDS.PERFECT_TEXT]: {
       enabled: true,
+      icon: "biohazard",
       name: "优化选中的内容【去除错别字+智能分段+修复标点符号】",
     },
     [COMMAND_IDS.TRANSLATE]: {
       enabled: true,
+      icon: "rotate-3d",
       name: "翻译选中的内容",
     },
     [COMMAND_IDS.CHANGE_TONE]: {
       enabled: true,
+      icon: "coffee",
       name: "改写选中内容的风格",
     },
   },

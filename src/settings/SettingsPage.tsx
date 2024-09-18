@@ -41,7 +41,7 @@ export interface CopilotSettings {
   maxSourceChunks: number;
   qaExclusionPaths: string;
   groqApiKey: string;
-  enabledCommands: Record<string, { enabled: boolean; name: string }>;
+  enabledCommands: Record<string, { enabled: boolean; name: string; icon: string }>;
   activeModels: Array<CustomModel>;
   activeEmbeddingModels: Array<CustomModel>;
 }

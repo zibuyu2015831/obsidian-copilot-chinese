@@ -36,7 +36,7 @@ import {
   summarizePrompt,
   tocPrompt,
 } from "@/utils";
-import { MarkdownView, Notice, TFile } from "obsidian";
+import { MarkdownView, Notice, Platform, TFile } from "obsidian";
 import React, { useContext, useEffect, useState } from "react";
 
 interface CreateEffectOptions {
@@ -496,7 +496,7 @@ ${chatContent}`;
         };
 
         setLoading(true);
-        await getAIResponse(
+        const res = await getAIResponse(
           promptMessage,
           chainManager,
           addMessage,
@@ -507,6 +507,11 @@ ${chatContent}`;
             ignoreSystemMessage,
           }
         );
+
+        if (plugin.isChatVisible() && res) {
+          new Notice('处理已完成，请调出右侧界面获取AI处理结果')
+        }
+
         setLoading(false);
       };
 

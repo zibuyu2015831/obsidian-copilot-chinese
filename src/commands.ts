@@ -10,6 +10,7 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
     if (commandSettings && commandSettings.enabled) {
       plugin.addCommand({
         id,
+        icon:commandSettings.icon,
         name: commandSettings.name,
         editorCallback: callback,
       });
@@ -17,7 +18,7 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
   };
 
   addCommandIfEnabled(COMMAND_IDS.FIX_GRAMMAR, (editor) => {
-    console.log('执行到这里1')
+
     plugin.processSelection(editor, "fixGrammarSpellingSelection");
   });
 
