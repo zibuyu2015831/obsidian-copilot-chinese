@@ -46,6 +46,11 @@ import {
 import PouchDB from "pouchdb-browser";
 import { CustomError } from "@/error";
 
+// 测试代码
+
+import { getAIResponse } from "@/langchainStream";
+// 测试代码
+
 export default class CopilotPlugin extends Plugin {
   settings: CopilotSettings;
   // A chat history that stores the messages sent and received
@@ -63,10 +68,13 @@ export default class CopilotPlugin extends Plugin {
   isChatVisible = () => this.chatIsVisible;
 
   async onload(): Promise<void> {
+
     // 加载配置
     await this.loadSettings();
 
+    // 添加配置界面
     this.addSettingTab(new CopilotSettingTab(this.app, this));
+
     // Always have one instance of sharedState and chainManager in the plugin
     this.sharedState = new SharedState();
     const langChainParams = this.getChainManagerParams();
@@ -101,7 +109,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "chat-toggle-window",
-      name: "打开/关闭copilot聊天框",
+      name: "打开/关闭copilot聊天框 (右侧区域)",
       callback: () => {
         this.toggleView();
       },
@@ -167,7 +175,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "apply-adhoc-prompt",
-      name: "Apply ad-hoc custom prompt",
+      name: "copilot 对话",
       callback: async () => {
         const modal = new AdhocPromptModal(this.app, async (adhocPrompt: string) => {
           try {
@@ -286,7 +294,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "garbage-collect-vector-store",
-      name: "Garbage collect vector store (remove files that no longer exist in vault)",
+      name: "清理索引存储 (移除不存在的文件)",
       callback: async () => {
         try {
           const files = this.app.vault.getMarkdownFiles();
@@ -317,7 +325,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "index-vault-to-vector-store",
-      name: "Index (refresh) vault for QA",
+      name: "刷新索引 (QA模式)",
       callback: async () => {
         try {
           const indexedFileCount = await this.indexVaultToVectorStore();
@@ -333,7 +341,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "force-reindex-vault-to-vector-store",
-      name: "Force re-index vault for QA",
+      name: "强制刷新索引 (QA模式)",
       callback: async () => {
         try {
           const indexedFileCount = await this.indexVaultToVectorStore(true);
@@ -362,7 +370,7 @@ export default class CopilotPlugin extends Plugin {
 
     this.addCommand({
       id: "set-vault-qa-exclusion",
-      name: "为 Vault QA 模式设置排除项",
+      name: "为 QA 模式设置排除项",
       callback: async () => {
         new QAExclusionModal(this.app, this.settings, async (paths: string) => {
           // Store the path in the plugin's settings, default to empty string
@@ -408,6 +416,26 @@ export default class CopilotPlugin extends Plugin {
     });
 
     this.registerEvent(this.app.workspace.on("editor-menu", this.handleContextMenu));
+
+
+    // 添加测试代码
+    // this.addRibbonIcon("bot", "测试AI", async () => {
+    //   new Notice('测试AI')
+    //   const res = await getAIResponse(
+    //     {
+    //       'isVisible': false,
+    //       'message': '2+2等于多少',
+    //       'sender': "【User】",
+    //     },
+    //     this.chainManager,
+    //     () => { },
+    //     () => { },
+    //     () => { },
+    //     { 'debug': false }
+    //   );
+    //   console.log(res)
+    // });
+
   }
 
   updateUserMessageHistory(newMessage: string) {
@@ -582,7 +610,12 @@ export default class CopilotPlugin extends Plugin {
     eventSubtype?: string,
     checkSelectedText = true
   ) {
-    const selectedText = await editor.getSelection();
+
+    let selectedText = await editor.getSelection();
+
+    if (selectedText === "") {
+      selectedText = this.getCurrentParagraph();
+    }
 
     const isChatWindowActive = this.app.workspace.getLeavesOfType(CHAT_VIEWTYPE).length > 0;
 
@@ -646,7 +679,7 @@ export default class CopilotPlugin extends Plugin {
         const activeFile = this.app.workspace.getActiveFile();
         return activeFile ? this.app.vault.cachedRead(activeFile) : "";
       },
-      replaceSelection: activeView?.editor?.replaceSelection.bind(activeView.editor) || (() => {}),
+      replaceSelection: activeView?.editor?.replaceSelection.bind(activeView.editor) || (() => { }),
     } as Partial<Editor> as Editor;
   }
 
@@ -922,5 +955,46 @@ export default class CopilotPlugin extends Plugin {
     }
 
     return messages;
+  }
+
+  getCurrentParagraph(): string {
+
+    // Use getActiveViewOfType to obtain the current Markdown editor view.
+    const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+    if (!markdownView) {
+      console.log("No active Markdown view found.");
+      return '';
+    }
+
+    const editor = markdownView.editor;
+
+    // Obtain the cursor position.
+    const cursor = editor.getCursor();
+    const lineNumber = cursor.line;
+
+    // Get all lines of the document.
+    const allLines = editor.getValue().split('\n');
+
+    // 查找当前段落
+    let startLine = lineNumber;
+    let endLine = lineNumber;
+
+    // Search for the starting line of the paragraph upwards (an empty line or the beginning of the file indicates the start of a paragraph).
+    while (startLine > 0 && allLines[startLine - 1].trim() !== '') {
+      startLine--;
+    }
+
+    // Search for the ending line of the paragraph downwards (an empty line or the end of the file indicates the end of a paragraph).
+    while (endLine < allLines.length - 1 && allLines[endLine + 1].trim() !== '') {
+      endLine++;
+    }
+
+    // Get the content of a paragraph.
+    const paragraph = allLines.slice(startLine, endLine + 1).join('\n');
+
+    return paragraph
+
+    // console.log("Current paragraph:", paragraph);
   }
 }

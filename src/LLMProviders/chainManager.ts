@@ -302,7 +302,7 @@ export default class ChainManager {
       ignoreSystemMessage?: boolean;
       updateLoading?: (loading: boolean) => void;
     } = {}
-  ) {
+  ): Promise<string>{
     const { debug = false, ignoreSystemMessage = false } = options;
 
     // Check if chat model is initialized
@@ -311,7 +311,7 @@ export default class ChainManager {
         "聊天模型未正确初始化，请在 Copilot 设置中检查您的 API 密钥，并确保您有 API 访问权限。";
       new Notice(errorMsg);
       console.error(errorMsg);
-      return;
+      return '';
     }
     // Check if chain is initialized properly
     if (!ChainManager.chain || !isSupportedChain(ChainManager.chain)) {
@@ -411,7 +411,7 @@ export default class ChainManager {
       const errorCode = errorData?.code || error;
       if (errorCode === "model_not_found") {
         const modelNotFoundMsg =
-          "You do not have access to this model or the model does not exist, please check with your API provider.";
+          "模型不存在或您没有该模型店访问权限，请检查模型设置是否正确";
         new Notice(modelNotFoundMsg);
         console.error(modelNotFoundMsg);
       } else {
@@ -422,11 +422,13 @@ export default class ChainManager {
       if (fullAIResponse) {
         // This line is a must for memory to work with RunnableSequence!
         await memory.saveContext({ input: userMessage }, { output: fullAIResponse });
+
         addMessage({
           message: fullAIResponse,
           sender: AI_SENDER,
           isVisible: true,
         });
+        
       }
       updateCurrentAiMessage("");
     }

@@ -1,6 +1,7 @@
 import ChainManager from "@/LLMProviders/chainManager";
 import { ChatMessage } from "@/sharedState";
 import { Notice } from "obsidian";
+import { string } from "prop-types";
 
 export type Role = "assistant" | "user" | "system";
 
@@ -18,8 +19,10 @@ export const getAIResponse = async (
 ) => {
   const abortController = new AbortController();
   updateShouldAbort(abortController);
+
+  let res = ''
   try {
-    await chainManager.runChain(
+    res = await chainManager.runChain(
       userMessage.message,
       abortController,
       updateCurrentAiMessage,
@@ -27,7 +30,9 @@ export const getAIResponse = async (
       options
     );
   } catch (error) {
-    console.error("Model request failed:", error);
-    new Notice("Model request failed:", error);
+    console.error("该模型请求失败:", error);
+    new Notice("该模型请求失败:", error);
+  } finally {
+    return res
   }
 };

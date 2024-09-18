@@ -127,6 +127,7 @@ const Chat: React.FC<ChatProps> = ({
 
     // Display running dots to indicate loading
     setLoading(true);
+
     await getAIResponse(
       promptMessageHidden,
       chainManager,
@@ -161,7 +162,7 @@ const Chat: React.FC<ChatProps> = ({
     const chatContent = chatHistory
       .filter((message) => message.isVisible)
       .map((message) => `---\n\n**${message.sender}**: ${message.message}`)
-      .join("\n\n") + '---\n\n';
+      .join("\n\n") + '\n\n---\n\n';
 
     try {
       // Check if the default folder exists or create it
@@ -437,6 +438,7 @@ ${chatContent}`;
   };
 
   useEffect(() => {
+
     async function handleSelection(event: CustomEvent) {
       const wordCount = event.detail.selectedText.split(" ").length;
       const tokenCount = await chainManager.chatModelManager.countTokens(event.detail.selectedText);
@@ -462,6 +464,7 @@ ${chatContent}`;
     promptFn: (selectedText: string, eventSubtype?: string) => string | Promise<string>,
     options: CreateEffectOptions = {}
   ) => {
+
     return () => {
       const {
         custom_temperature,
@@ -469,10 +472,12 @@ ${chatContent}`;
         ignoreSystemMessage = true, // Ignore system message by default for commands
       } = options;
       const handleSelection = async (event: CustomEvent) => {
+
         const messageWithPrompt = await promptFn(
           event.detail.selectedText,
           event.detail.eventSubtype
         );
+
         // Create a user message with the selected text
         const promptMessage: ChatMessage = {
           message: messageWithPrompt,
@@ -605,7 +610,7 @@ ${chatContent}`;
     const editor = leaf.view.editor;
     const cursor = editor.getCursor();
     editor.replaceRange(message, cursor);
-    new Notice("Message inserted into the active note.");
+    new Notice("AI内容已插入当前笔记");
   };
 
   // Expose handleSaveAsNote to parent

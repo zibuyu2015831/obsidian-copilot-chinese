@@ -17,6 +17,7 @@ export function registerBuiltInCommands(plugin: CopilotPlugin) {
   };
 
   addCommandIfEnabled(COMMAND_IDS.FIX_GRAMMAR, (editor) => {
+    console.log('执行到这里1')
     plugin.processSelection(editor, "fixGrammarSpellingSelection");
   });
 

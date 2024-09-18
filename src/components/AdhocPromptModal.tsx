@@ -4,7 +4,7 @@ export class AdhocPromptModal extends Modal {
   result: string;
   onSubmit: (result: string) => void;
 
-  private placeholderText = "请在这里输入你自定义的 ad-hoc prompt, 按下回车发送";
+  private placeholderText = "输入内容后回车，即可开启AI会话";
 
   constructor(app: App, onSubmit: (result: string) => void) {
     super(app);
